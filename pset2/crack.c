@@ -23,12 +23,8 @@ int main(int argc, char *argv[])
     // initialize a string of 5 bytes (the assignment specified the pw can be max 4 characters long)
     char key[5];
 
-    // set all idx of the string = to null
-    //for (int i = 0; i < 5; i++) {
-    //    key[i] = '\0';
-    //}
-
-
+    // nested for loops brute-force every combination of letters and string
+    // sizes 1-4 against the hash to find the password
     for (int i = 0, n = strlen(input); i < n; i++) {
         key[0] = input[i];
         key[1] = '\0';
