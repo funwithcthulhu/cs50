@@ -1,4 +1,3 @@
-#define _XOPEN_SOURCE
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
@@ -23,36 +22,29 @@ int main(int argc, char *argv[])
     // initialize a string of 5 bytes (the assignment specified the pw can be max 4 characters long)
     char key[5];
 
-    // nested for loops brute-force every combination of letters and string
-    // sizes 1-4 against the hash to find the password
+    // brute-force every combination of letters
     for (int i = 0, n = strlen(input); i < n; i++) {
         key[0] = input[i];
-        key[1] = '\0';
+        key[1] = '\0';  // check str size of 1
         if (key_check(key, hash)) {
             printf("%s\n", key);
             return 0;
         }
         for (int j = 0; j < strlen(input); j++) {
-            key[0] = input[i];
             key[1] = input[j];
-            key[2] = '\0';
+            key[2] = '\0';  // check string size 2
             if (key_check(key, hash)) {
                 printf("%s\n", key);
                 return 0;
             }
             for (int k = 0; k < strlen(input); k++) {
-                key[0] = input[i];
-                key[1] = input[j];
                 key[2] = input[k];
-                key[3] = '\0';
+                key[3] = '\0';  // check str size of 3
                 if (key_check(key, hash)) {
                     printf("%s\n", key);
                     return 0;
                 }
                 for (int m = 0; m < strlen(input); m++) {
-                    key[0] = input[i];
-                    key[1] = input[j];
-                    key[2] = input[k];
                     key[3] = input[m];
                     if (key_check(key, hash)) {
                         printf("%s\n", key);
