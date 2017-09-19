@@ -61,9 +61,6 @@
      highest++;
      int count[highest];
  
-     // initialize result array with a size of n + 1
-     int temp[n];
- 
      // set all values in the count array equal to zero
      for (int i = 0; i <= highest; i++) {
          count[i] = 0;
@@ -79,15 +76,18 @@
      for (int i = 1; i < highest; i++) {
          count[i] += count[i - 1];
      }
+     
+    // initialize output array with a size of n
+    int temp[n];    
  
- 
-     // create output array
+     // create output array by using the value of the input array to reference
+     // the sorted index of the count array, offset by minus 1 to account for 0
      for (int i = n - 1; i >= 0; i--) {
          temp[count[values[i]] - 1] = values[i];
          count[values[i]] = count[values[i]] - 1;
      }
  
-     // set our array equal to the temp array
+     // set our array equal to the temp output array
      for (int i = 0; values[i]; i++) {
          values[i] = temp[i];
      }
