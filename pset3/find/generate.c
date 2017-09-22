@@ -18,7 +18,7 @@
  // upper limit on range of integers that can be generated
  #define LIMIT 65536
  
- int main(int argc, char *argv[])
+ int main(int argc, string argv[])
  {
      // if there are not 2 or 3 arguments exit and return an error message
      if (argc != 2 && argc != 3)
