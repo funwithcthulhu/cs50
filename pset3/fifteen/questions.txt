@@ -1,4 +1,4 @@
-0. TODO
-1. TODO
-2. TODO
-3. TODO
+0. dimensions ranging from 3 x 3 to 9 x 9. Only squares (i.e. height == width)
+1. A nested (or 2 dimensional) array, aka a matrix.
+2. greet().
+3. The functions: won(), move(), draw(), init().
