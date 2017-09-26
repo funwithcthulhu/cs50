@@ -11,7 +11,7 @@
  * Note that usleep is obsolete, but it offers more granularity than
  * sleep and is simpler to use than nanosleep; `man usleep` for more.
  */
- 
+
 #define _XOPEN_SOURCE 500
 
 #include <cs50.h>
@@ -28,6 +28,10 @@ int board[DIM_MAX][DIM_MAX];
 
 // dimensions
 int d;
+
+// blank space location
+int blank_row;
+int blank_col;
 
 // prototypes
 void clear(void);
@@ -102,7 +106,7 @@ int main(int argc, string argv[])
         // prompt for move
         printf("Tile to move: ");
         int tile = get_int();
-        
+
         // quit if user inputs 0 (for testing)
         if (tile == 0)
         {
@@ -123,7 +127,7 @@ int main(int argc, string argv[])
         // sleep thread for animation's sake
         usleep(500000);
     }
-    
+
     // close log
     fclose(file);
 
@@ -152,11 +156,31 @@ void greet(void)
 
 /**
  * Initializes the game's board with tiles numbered 1 through d*d - 1
- * (i.e., fills 2D array with values but does not actually print them).  
+ * (i.e., fills 2D array with values but does not actually print them).
  */
 void init(void)
 {
-    // TODO
+    int tiles = d * d - 1;
+    for (int i = 0; i < d; i++)
+    {
+        for (int j = 0; j < d; j++)
+        {
+            board[i][j] = tiles;
+            tiles--;
+        }
+    }
+
+    // initialize blank val (underscore)
+    board[d - 1][d - 1] = 0;
+    blank_row = d - 1;
+    blank_col = d - 1;
+
+    // if d is even, swap the 1 and 2 tiles
+    if (d % 2 == 0)
+    {
+        board[d - 1][d - 2] = 2;
+        board[d - 1][d - 3] = 1;
+    }
 }
 
 /**
@@ -164,25 +188,109 @@ void init(void)
  */
 void draw(void)
 {
-    // TODO
+
+    for (int i = 0; i < d; i++)
+    {
+        for (int j = 0; j < d; j++)
+        {
+            if (board[i][j] == 0)
+            {
+                printf(" __ ");
+            } else
+            {
+                printf(" %2d ", board[i][j]);
+            }
+
+        }
+        printf("\n");
+    }
 }
 
 /**
  * If tile borders empty space, moves tile and returns true, else
- * returns false. 
+ * returns false.
  */
 bool move(int tile)
 {
-    // TODO
+
+    if (tile > (d * d) - 1 || tile < 1)
+    {
+        return false;
+    }
+
+    int tile_col;
+    int tile_row;
+    for (int i = 0; i < d; i++)
+    {
+        for (int j = 0; j < d; j++)
+        {
+            if (board[i][j] == tile)
+            {
+                tile_row = i;
+                tile_col = j;
+            }
+        }
+    }
+
+    if (tile_row < d - 1 && board[tile_row + 1][tile_col] == 0) {
+        board[tile_row + 1][tile_col] = board[tile_row][tile_col];
+        blank_row = tile_row;
+        blank_col = tile_col;
+        board[blank_row][blank_col] = 0;
+        return true;
+    }
+    if (tile_row > 0 && board[tile_row - 1][tile_col] == 0)
+    {
+        board[tile_row - 1][tile_col] = board[tile_row][tile_col];
+        blank_row = tile_row;
+        blank_col = tile_col;
+        board[blank_row][blank_col] = 0;
+        return true;
+    }
+    if (tile_col < d - 1 && board[tile_row][tile_col + 1] == 0)
+    {
+        board[tile_row][tile_col + 1] = board[tile_row][tile_col];
+        blank_row = tile_row;
+        blank_col = tile_col;
+        board[blank_row][blank_col] = 0;
+        return true;
+    }
+    if (tile_col > 0 && board[tile_row][tile_col - 1] == 0)
+    {
+        board[tile_row][tile_col - 1] = board[tile_row][tile_col];
+        blank_row = tile_row;
+        blank_col = tile_col;
+        board[blank_row][blank_col] = 0;
+        return true;
+    }
     return false;
 }
 
 /**
- * Returns true if game is won (i.e., board is in winning configuration), 
+ * Returns true if game is won (i.e., board is in winning configuration),
  * else false.
  */
 bool won(void)
 {
-    // TODO
-    return false;
+    int tiles = 1;
+    for (int i = 0; i < d; i++)
+    {
+        for (int j = 0; j < d; j++)
+        {
+            if (board[i][j] == tiles)
+            {
+                tiles++;;
+            }
+
+        }
+    }
+    if (tiles == d * d && board[d - 1][d - 1] == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
 }
