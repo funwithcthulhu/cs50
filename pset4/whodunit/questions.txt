@@ -1,0 +1,16 @@
+1.  stdint.h includes typedef's for width-specific integer types.
+2.  Allows for greater portability and precision when defining integer types.
+3.  BYTE is one byte, DWORD is 4 bytes, LONG is 4 bytes, and WORD is 2 bytes.
+4.  The first two bytes of a BMP file must be 'B' and 'M' (in ASCII).
+5.  bfSize is the total size in bytes of the bmp file itself, while biSize is the
+    size of the 'structure', presumably the image?
+6.  The bmp is a "top-down" DIB, and its origin is the upper left corner (where the image starts)
+7.  biBitCount defines the number of bits per pixel.
+8.  If the file either doesn't exist, or cannot be opened for some reason (corrupted?)
+9.  The third element of fread specifies how many 'data elements' we want to read of the specified
+    size (the second element). We specify the size of an element before hand (the header, or the
+    rgb triple), thus, we want to read each element at a time.
+10. If bi.biWidth is 3, copy.c assigns a value of 3 to the padding (equal to one RGB triple, so as
+    to ensure a multiple of 4)
+11. fseek changes the changes the position indicator for the stream it points to.
+12. The current position indicator of the stream/file.
